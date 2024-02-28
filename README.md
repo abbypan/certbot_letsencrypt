@@ -1,31 +1,31 @@
-# certbot_renew_letsencrypt_godaddy
+# letsencrypt cert request 
 
-## install 
+# install
 
-    apt-get install certbot letsencrypt curl
-    cpan JSON
+debian:
 
-## certbot
+    apt install certbot apache2 openssl
 
-https://eff-certbot.readthedocs.io/en/stable/using.html
+# prepare
 
-## godaddy production key and secret
+domain: example.com
 
-https://developer.godaddy.com/doc/endpoint/domains
+mail: foousr@gmail.com
 
-suppose that 
+web dir: /var/www/html
 
-    GODADDY_KEY_ID="aaaa"
-    GODADDY_KEY_SECRET="bbbb"
+# request cert
 
-## usage
-    
-    # manual
-    certbot renew --manual --preferred-challenges dns --manual-auth-hook "./certbot_renew_letsencrypt_godaddy.pl [godaddy_key_id] [godaddy_key_secret]"
-    certbot renew --manual --preferred-challenges dns --manual-auth-hook "./certbot_renew_letsencrypt_godaddy.pl aaaa bbbb"
-    
-    #set environment variable
-    export GODADDY_KEY_ID="aaaa"
-    export GODADDY_KEY_SECRET="bbbb"
+generate ecc-privkey.pem, ecc-csr.pem:
 
-    certbot renew --manual --preferred-challenges dns --manual-auth-hook "./certbot_renew_letsencrypt_godaddy.pl"
+    ./gen_csr.sh
+
+request cert:
+
+    ./req_cert.sh
+
+finally output:
+
+    cert.pem, chain.pem, fullchain.pem
+
+    ecc-privkey.pem -> privkey.pem
