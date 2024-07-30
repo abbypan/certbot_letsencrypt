@@ -1,31 +1,53 @@
-# letsencrypt cert request 
+# letsencrypt cert request/renew 
+
+certbot: https://eff-certbot.readthedocs.io/en/stable/using.html
 
 # install
 
 debian:
 
-    apt install certbot apache2 openssl
+    apt install certbot apache2 openssl letsencrypt curl
+    cpan JSON
 
-# prepare
+# webroot
 
-domain: example.com
-
-mail: foousr@gmail.com
+domain: foo.com
 
 web dir: /var/www/html
 
-# request cert
+## request cert
 
-generate ecc-privkey.pem, ecc-csr.pem:
+    cd webroot
+    ./gen_csr.sh foo.com
+    ./cert_req.sh foo.com
 
-    ./gen_csr.sh
+output:
+    cert.pem, chain.pem, fullchain.pem, privkey.pem
 
-request cert:
+    
+# dns
 
-    ./req_cert.sh
+domain: foo.com
 
-finally output:
+wildcard domain: *.foo.com
 
-    cert.pem, chain.pem, fullchain.pem
+## godaddy production key and secret
 
-    ecc-privkey.pem -> privkey.pem
+https://developer.godaddy.com/doc/endpoint/domains
+
+suppose that 
+
+    GODADDY_KEY_ID="aaaa"
+    GODADDY_KEY_SECRET="bbbb"
+
+## request cert
+    
+    #set environment variable
+    export GODADDY_KEY_ID="aaaa"
+    export GODADDY_KEY_SECRET="bbbb"
+
+    cd dns
+    ./cert_req.sh foo.com
+
+    #manual
+    certbot certonly -v --manual --preferred-challenges dns -d foo.com  -d *.foo.com --debug-challenges  --manual-auth-hook "./godaddy_auth_hook.pl" --manual-cleanup-hook "./godaddy_cleanup_hook.pl"
