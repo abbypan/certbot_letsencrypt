@@ -18,7 +18,7 @@ put_dns_acme_challenge_txt( $access_key_id, $access_key_secret, $domain, $acme_r
 #create_dns_rr($access_key_id, $access_key_secret, $domain, $acme_rr);
 #delete_dns_acme_challenge_txt($access_key_id, $access_key_secret, $domain);
 
-sleep 20;
+sleep 30;
 
 sub put_dns_acme_challenge_txt {
   my ( $access_key_id, $access_key_secret, $domain, $acme_rr ) = @_;
